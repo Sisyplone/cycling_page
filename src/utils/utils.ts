@@ -421,6 +421,7 @@ export {
   geoJsonForRuns,
   geoJsonForMap,
   titleForRun,
+  titleForRide,
   filterYearRuns,
   filterCityRuns,
   filterTitleRuns,
