@@ -4,7 +4,7 @@ import { WebMercatorViewport } from 'viewport-mercator-project';
 import { chinaGeojson, RPGeometry } from '@/static/run_countries';
 import worldGeoJson from '@surbowl/world-geo-json-zh/world.zh.json';
 import { chinaCities } from '@/static/city';
-import { MAIN_COLOR, MUNICIPALITY_CITIES_ARR, NEED_FIX_MAP, RUN_TITLES, ACTIVITY_TYPES, RICH_TITLE } from './const';
+import { MAIN_COLOR, MUNICIPALITY_CITIES_ARR, NEED_FIX_MAP, RUN_TITLES, RIDE_TITLES, ACTIVITY_TYPES, RICH_TITLE } from './const';
 import { FeatureCollection, LineString } from 'geojson';
 
 export type Coordinate = [number, number];
@@ -299,6 +299,37 @@ const titleForRun = (run: Activity): string => {
     return RUN_TITLES.EVENING_RUN_TITLE;
   }
   return RUN_TITLES.NIGHT_RUN_TITLE;
+};
+
+const titleForRide = (ride: Activity): string => {
+  if (RICH_TITLE) {
+    // 1. try to use user defined name
+    if (ride.name != '') {
+      return ride.name;
+    }
+    // 2. try to use location+type if the location is available, eg. 'Shanghai Run'
+    const { city, province } = locationForRun(ride);
+    const activity_sport = getActivitySport(ride);
+    if (city && city.length > 0 && activity_sport.length > 0) {
+      return `${city} ${activity_sport}`;
+    }
+  }
+  // 3. use time+length if location or type is not available
+  const runDistance = ride.distance / 1000;
+  const rideHour = +ride.start_date_local.slice(11, 13);
+  if (rideHour >= 0 && rideHour <= 10) {
+    return RIDE_TITLES.MORNING_RIDE_TITLE;
+  }
+  if (rideHour > 10 && rideHour <= 14) {
+    return RIDE_TITLES.MIDDAY_RIDE_TITLE;
+  }
+  if (rideHour > 14 && rideHour <= 18) {
+    return RIDE_TITLES.AFTERNOON_RIDE_TITLE;
+  }
+  if (rideHour > 18 && rideHour <= 21) {
+    return RIDE_TITLES.EVENING_RIDE_TITLE;
+  }
+  return RIDE_TITLES.NIGHT_RIDE_TITLE;
 };
 
 export interface IViewState {

@@ -43,7 +43,7 @@ const YearStat = ({ year, onClick }: { year: string, onClick: (_year: string) =>
     }
   });
   sumDistance = parseFloat((sumDistance / 1000.0).toFixed(1));
-  const avgPace = formatPace(totalMetersAvail / totalSecondsAvail);
+  const avgPace = totalMetersAvail / totalSecondsAvail;
   const hasHeartRate = !(heartRate === 0);
   const avgHeartRate = (heartRate / (runs.length - heartRateNullCount)).toFixed(
     0
@@ -56,9 +56,9 @@ const YearStat = ({ year, onClick }: { year: string, onClick: (_year: string) =>
     >
       <section>
         <Stat value={year} description=" Journey" />
-        <Stat value={runs.length} description=" Runs" />
+        <Stat value={runs.length} description=" Rides" />
         <Stat value={sumDistance} description=" KM" />
-        <Stat value={avgPace} description=" Avg Pace" />
+        <Stat value={avgPace} description=" Avg Speed" />
         <Stat value={`${streak} day`} description=" Streak" />
         {hasHeartRate && (
           <Stat value={avgHeartRate} description=" Avg Heart Rate" />
